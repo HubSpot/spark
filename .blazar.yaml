@@ -19,8 +19,3 @@ after:
       commands:
         - ./dev/make-distribution.sh --name hubspot-spark-2.0.0-scala-211 --tgz $HAOOP_OPTS $MAVEN_PROFILES $SCALA_OPTS
         - echo "uploading distribution to somwhere ..."
-
-
-stepActivation:
-  uploadDeployable:
-    branches: ['master', 'blazar-single-module']
