@@ -1,1 +1,1 @@
-disabledDiscoveries: ["maven"]
+disabledDiscoveries: ["maven", 'docker']
