@@ -1,3 +1,27 @@
+buildpack:
+  host: git.hubteam.com
+  organization: HubSpot
+  repository: Blazar-Buildpack-Java
+  branch: v2-single-module
+
 env:
-  MAVEN_ARGS: -DskipTests=true
-  SKIP_VERSION_OVERRIDE: 1
+  HADOOP_OPTS: -Phadoop-2.2 -Dhadoop.version=2.2.0
+  SCALA_OPTS: -Dscala-2.11
+  SPARK_VERSION: '2.0.1'
+  MAVEN_OPTS: -Xmx1024m
+  MAVEN_PROFILES: -Pyarn -Pnetlib-lgpl
+  # MAVEN_ARGS is the var used to pass your args to maven by the parent buildpack
+  MAVEN_ARGS: $HADOOP_OPTS $MAVEN_PROFILES $SCALA_OPTS -DskipTests=true
+  SET_VERSION_OVERRIDE: "$(if [ \"$GIT_BRANCH\" == 'master' ]; then echo $SPARK_VERSION-SNAPSHOT; else echo $SPARK_VERSION-$GIT_BRANCH-SNAPSHOT; fi)"
+
+after:
+  onSuccess:
+    - description: "Create distribution"
+      commands:
+        - ./dev/make-distribution.sh --name hubspot-spark-2.0.0-scala-211 --tgz $HAOOP_OPTS $MAVEN_PROFILES $SCALA_OPTS
+        - echo "uploading distribution to somwhere ..."
+
+
+stepActivation:
+  uploadDeployable:
+    branches: ['master', 'blazar-single-module']
