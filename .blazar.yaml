@@ -8,6 +8,7 @@ env:
   HADOOP_OPTS: -Phadoop-2.2 -Dhadoop.version=2.2.0
   SCALA_OPTS: -Dscala-2.11
   SPARK_VERSION: '2.0.1'
+  MAVEN_OPTS: -Xmx1024m
   MAVEN_PROFILES: -Pyarn -Pnetlib-lgpl
   # MAVEN_ARGS is the var used to pass your args to maven by the parent buildpack
   MAVEN_ARGS: $HADOOP_OPTS $MAVEN_PROFILES $SCALA_OPTS -DskipTests=true
